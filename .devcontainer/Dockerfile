@@ -35,10 +35,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
 # Install Grype (vulnerability scanner)
-RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin \
+    && /usr/local/bin/grype db update
 
 # Install cdxgen (CycloneDX SBOM generator)
-RUN npm install -g @cyclonedx/cdxgen
+RUN npm install -g @cyclonedx/cdxgen \
+    && apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends openjdk-25-jdk-headless maven \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install CycloneDX CLI (prebuilt Linux binary)
 RUN curl -sSfL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.29.1/cyclonedx-linux-$TARGETARCH" -o /usr/local/bin/cyclonedx \
