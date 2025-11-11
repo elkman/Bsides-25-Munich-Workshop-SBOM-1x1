@@ -39,12 +39,12 @@ RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh |
 RUN npm install -g @cyclonedx/cdxgen
 
 # Install CycloneDX CLI (prebuilt Linux binary)
-RUN curl -sSfL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.29.1/cyclonedx-linux-x64" -o /usr/local/bin/cyclonedx \
+RUN curl -sSfL "https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.29.1/cyclonedx-linux-arm64" -o /usr/local/bin/cyclonedx \
     && chmod +x /usr/local/bin/cyclonedx
 
 # Install sbomqs (.deb package)
-RUN SBOMQS_URL="https://github.com/interlynk-io/sbomqs/releases/download/v1.3.0/sbomqs_1.3.0_amd64.deb" \
-    && TMP_DEB="/tmp/sbomqs_1.3.0_amd64.deb" \
+RUN SBOMQS_URL="https://github.com/interlynk-io/sbomqs/releases/download/v1.3.0/sbomqs_1.3.0_arm64.deb" \
+    && TMP_DEB="/tmp/sbomqs_1.3.0_arm64.deb" \
     && curl -sSfL "$SBOMQS_URL" -o "$TMP_DEB" \
     && (dpkg -i "$TMP_DEB" || (apt-get update && apt-get install -f -y)) \
     && rm -f "$TMP_DEB" \
